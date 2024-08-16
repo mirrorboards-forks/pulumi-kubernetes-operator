@@ -6,8 +6,8 @@ FROM pulumi/pulumi:3.129.0
 # Detect architecture and install tini manually
 RUN dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" && echo "Architecture: $dpkgArch"
 
-RUN wget -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v$TINI_VERSION/tini-$dpkgArch" \
-    && wget -O /usr/local/bin/tini.asc "https://github.com/krallin/tini/releases/download/v$TINI_VERSION/tini-$dpkgArch.asc"
+RUN wget -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v0.19.0/tini-$dpkgArch" \
+    && wget -O /usr/local/bin/tini.asc "https://github.com/krallin/tini/releases/download/v0.19.0/tini-$dpkgArch.asc"
 
 RUN export GNUPGHOME="$(mktemp -d)" \
     && gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys 6380DC428747F6C393FEACA59A84159D7001A4E5 \
