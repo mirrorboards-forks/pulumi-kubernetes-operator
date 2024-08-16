@@ -2,8 +2,8 @@
 name: Pulumi Kubernetes Operator  Master Builds
 on:
   push:
-    branches:
-      - "master"
+    # branches:
+    #   - "master"
     paths-ignore:
       - CHANGELOG.md
 env:
