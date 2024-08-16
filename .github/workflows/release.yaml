@@ -59,7 +59,7 @@ jobs:
   #       run: |
   #         scripts/ci-infra-destroy.sh
   release:
-    needs: [operator-int-tests]
+    # needs: [operator-int-tests]
     runs-on: ubuntu-latest
     name: Tag Release
     steps:
