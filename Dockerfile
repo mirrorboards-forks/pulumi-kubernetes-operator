@@ -9,9 +9,8 @@ RUN dpkgArch="$(dpkg --print-architecture)" \
     && gpg --batch --verify /usr/local/bin/tini.asc /usr/local/bin/tini \
     && gpgconf --kill all \
     && rm -r "$GNUPGHOME" /usr/local/bin/tini.asc \
-    && chmod +x /usr/local/bin/tini \
-    && tini -h
-    
+    && chmod +x /usr/local/bin/tini
+
 ENTRYPOINT ["tini", "--", "/usr/local/bin/pulumi-kubernetes-operator"]
 
 # install operator binary
