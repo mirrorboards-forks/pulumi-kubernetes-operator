@@ -1,15 +1,23 @@
 FROM pulumi/pulumi:3.129.0
 
 ENV TINI_VERSION='0.18.0'
-RUN dpkgArch="$(dpkg --print-architecture)" \
-    && wget -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v$TINI_VERSION/tini-$dpkgArch" \
-    && wget -O /usr/local/bin/tini.asc "https://github.com/krallin/tini/releases/download/v$TINI_VERSION/tini-$dpkgArch.asc" \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget \
+    ca-certificates \
+    gnupg \
+    dirmngr \
+    && dpkgArch="$(dpkg --print-architecture)" \
+    && wget -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-${dpkgArch}" \
+    && wget -O /usr/local/bin/tini.asc "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-${dpkgArch}.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys 6380DC428747F6C393FEACA59A84159D7001A4E5 \
+    && gpg --batch --keyserver hkps://keyserver.ubuntu.com --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
     && gpg --batch --verify /usr/local/bin/tini.asc /usr/local/bin/tini \
     && gpgconf --kill all \
-    && rm -r "$GNUPGHOME" /usr/local/bin/tini.asc \
-    && chmod +x /usr/local/bin/tini
+    && rm -rf "$GNUPGHOME" /usr/local/bin/tini.asc \
+    && chmod +x /usr/local/bin/tini \
+    && tini --version \
+    && apt-get purge -y --auto-remove gnupg dirmngr \
+    && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["tini", "--", "/usr/local/bin/pulumi-kubernetes-operator"]
 
